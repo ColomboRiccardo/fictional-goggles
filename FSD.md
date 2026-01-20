@@ -29,3 +29,21 @@ The development is going to be divided in various phases:
 ## 2. System overview
 
 The whole game is going to be developed in React. If there is a need for a backend (this game is going to be single player for now), it will be developed in Node.js/Express and PostgreSQL
+
+## 3. Functional Requirements
+
+## 4. Non-Functional Requirements
+
+## 5. Test Cases
+
+## 6. Example Usage
+
+## 7. Revision History
+
+## 8. Approval Section
+
+## 9. Appendices
+
+## 10. References
+
+## 11. License

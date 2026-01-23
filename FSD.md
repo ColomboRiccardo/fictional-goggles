@@ -33,6 +33,8 @@ The whole game is going to be developed in React. If there is a need for a backe
 ## 3. Functional Requirements
 
 
+
+
 ## 4. Non-Functional Requirements
 
 ## 5. Test Cases

@@ -51,3 +51,5 @@ The whole game is going to be developed in React. If there is a need for a backe
 ## 10. References
 
 ## 11. License
+
+something here

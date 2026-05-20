@@ -1,0 +1,58 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/fictional-goggles-backend:${SHORT_SHA}
+      - ./backend
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg
+      - VITE_API_URL=${_BACKEND_URL}
+      - -t
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/fictional-goggles-frontend:${SHORT_SHA}
+      - ./frontend
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/fictional-goggles-backend:${SHORT_SHA}
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/fictional-goggles-frontend:${SHORT_SHA}
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - fictional-goggles-backend
+      - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/fictional-goggles-backend:${SHORT_SHA}
+      - --region=${_REGION}
+      - --platform=managed
+      - --allow-unauthenticated
+      - --set-env-vars=GOOGLE_CLOUD_PROJECT=${PROJECT_ID},CORS_ORIGINS=${_FRONTEND_URL}
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - fictional-goggles-frontend
+      - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/fictional-goggles-frontend:${SHORT_SHA}
+      - --region=${_REGION}
+      - --platform=managed
+      - --allow-unauthenticated
+
+substitutions:
+  _REGION: us-central1
+  _REPOSITORY: fictional-goggles
+  _BACKEND_URL: https://fictional-goggles-backend-REPLACE.run.app
+  _FRONTEND_URL: https://fictional-goggles-frontend-REPLACE.run.app
+
+options:
+  logging: CLOUD_LOGGING_ONLY
